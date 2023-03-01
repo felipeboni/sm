@@ -15,7 +15,7 @@ const Layout = ({ children }) => {
   return (
     <>
       <div
-        className={`${poppins.className} h-screen flex items-center justify-center`}
+        className={`${poppins.className} mt-[72px] h-screen flex  justify-center`}
       >
         <Navbar />
 

@@ -3,7 +3,7 @@ import { useState } from "react"
 import Image from "next/image";
 import Link from "next/link";
 
-import { Modal } from "../components/indications"
+import { Modal } from "@/modules/components/indications"
 
 const Navbar = ({ className }) => {
   const value = 150;
