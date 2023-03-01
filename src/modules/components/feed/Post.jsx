@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { formatNumber } from "../../../helpers/format/numberFormat";
+import { formatNumber } from "@/helpers/format/numberFormat";
 
 import { IOSView } from "react-device-detect";
 import { Video } from "./Video";

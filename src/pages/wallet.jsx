@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 
 export default function Wallet() {
   const [openModal, setOpenModal] = useState(false);
+  const [activeType, setActiveType] = useState("cpf");
 
   const value = 150;
 
@@ -49,8 +50,20 @@ export default function Wallet() {
 
           <div className="flex flex-col gap-2">
             <div className="grid grid-flow-col grid-cols-4 gap-2">
-              <button className="flex flex-col items-center justify-center flex-1 gap-2 px-1 py-3 font-medium text-white border rounded-lg bg-primary-500">
-                <User1 set="curved" size="24" strokeWidth="1.5" color="white" />
+              <button
+                onClick={() => setActiveType("cpf")}
+                className={`transition-colors flex flex-col items-center justify-center flex-1 gap-2 px-1 py-3 font-medium  border rounded-lg ${
+                  activeType === "cpf"
+                    ? "bg-primary-500 text-white"
+                    : "bg-offwhite"
+                }`}
+              >
+                <User1
+                  set="curved"
+                  size="24"
+                  strokeWidth="1.5"
+                  color={activeType === "cpf" ? "white" : "black"}
+                />
 
                 <span className="text-sm">
                   CPF/
@@ -58,18 +71,57 @@ export default function Wallet() {
                   CPNJ
                 </span>
               </button>
-              <button className="flex flex-col items-center justify-center flex-1 gap-2 p-1 font-medium text-white border rounded-lg bg-primary-500">
-                <User1 set="curved" size="24" strokeWidth="1.5" color="white" />
+
+              <button
+                onClick={() => setActiveType("phone")}
+                className={`transition-colors flex flex-col items-center justify-center flex-1 gap-2 px-1 py-3 font-medium  border rounded-lg ${
+                  activeType === "phone"
+                    ? "bg-primary-500 text-white"
+                    : "bg-offwhite"
+                }`}
+              >
+                <Smartphone
+                  set="curved"
+                  size="24"
+                  strokeWidth="1.5"
+                  color={activeType === "phone" ? "white" : "black"}
+                />
 
                 <span className="text-sm">Celular</span>
               </button>
-              <button className="flex flex-col items-center justify-center flex-1 gap-2 p-1 font-medium text-white border rounded-lg bg-primary-500">
-                <User1 set="curved" size="24" strokeWidth="1.5" color="white" />
+
+              <button
+                onClick={() => setActiveType("mail")}
+                className={`transition-colors flex flex-col items-center justify-center flex-1 gap-2 px-1 py-3 font-medium  border rounded-lg ${
+                  activeType === "mail"
+                    ? "bg-primary-500 text-white"
+                    : "bg-offwhite"
+                }`}
+              >
+                <Mail
+                  set="curved"
+                  size="24"
+                  strokeWidth="1.5"
+                  color={activeType === "mail" ? "white" : "black"}
+                />
 
                 <span className="text-sm">E-mail</span>
               </button>
-              <button className="flex flex-col items-center justify-center flex-1 gap-2 p-1 font-medium text-white border rounded-lg bg-primary-500">
-                <User1 set="curved" size="24" strokeWidth="1.5" color="white" />
+
+              <button
+                onClick={() => setActiveType("random")}
+                className={`transition-colors flex flex-col items-center justify-center flex-1 gap-2 px-1 py-3 font-medium  border rounded-lg ${
+                  activeType === "random"
+                    ? "bg-primary-500 text-white"
+                    : "bg-offwhite"
+                }`}
+              >
+                <Refresh
+                  set="curved"
+                  size="24"
+                  strokeWidth="1.5"
+                  color={activeType === "random" ? "white" : "black"}
+                />
 
                 <span className="text-sm">Aleatória</span>
               </button>

@@ -20,10 +20,10 @@ const BottomNav = ({ className }) => {
         <Wallet set="curved" size="36" color={currentRoute === "/wallet" ? "white" : "rgb(239, 62, 91)"} fill={currentRoute === "/wallet" ? "rgb(239, 62, 91)" : "white"} strokeWidth="1"/>
       </Link>
 
-      <Link className="px-10 py-2 font-semibold" href="/profile">
-        <div className="relative w-auto">
+      <Link className="px-10 font-semibold" href="/profile">
+        <div className="relative w-auto h-full">
           <span
-            className={`absolute right-0 p-4 -translate-x-1/2 -translate-y-1/2 border rounded-full top-1/2 left-1/2 ${
+            className={`absolute right-0 p-3.5 -translate-x-1/2 -translate-y-1/2 border rounded-full top-1/2 left-1/2 ${
               currentRoute === "/profile"
                 ? "border-primary-500"
                 : "border-black/25"
