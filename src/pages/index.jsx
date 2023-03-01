@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { Post } from "@/modules/components/feed";
 import { FullPage, Slide } from "react-full-page";
 
@@ -6,11 +7,7 @@ export default function Home() {
   const initialSlide = 0;
 
   const [activeSlider, setActiveSlider] = useState(initialSlide);
-
-  useEffect(() => {
-    console.log(activeSlider);
-  }, [activeSlider]);
-
+  const [loadingPosts, setLoadingPosts] = useState(false);
   const [sliders, setSliders] = useState([
     {
       videoUri:
@@ -45,6 +42,20 @@ export default function Home() {
       description: "lorem ipsum dolor isit amet"
     },
   ]);
+
+  useEffect(() => {
+    if (activeSlider + 1 === sliders.length) return getMorePosts()
+  }, [activeSlider]);
+
+  const getMorePosts = () => {
+    setLoadingPosts(true);
+    setSliders(oldSliders => {
+      return [
+        ...oldSliders,
+        ...sliders
+      ]
+    })
+  }
 
   return (
     <>

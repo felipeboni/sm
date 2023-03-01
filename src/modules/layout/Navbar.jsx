@@ -27,7 +27,7 @@ const Navbar = ({ className }) => {
           </button>
           <Link
             className="px-4 py-2 font-semibold text-white rounded bg-primary-500"
-            href="#"
+            href="/wallet"
           >
             R${value},00
           </Link>

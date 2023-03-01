@@ -5,6 +5,7 @@ const Video = ({videoUri, isPlaying}) => {
   
   useEffect(() => {
     videoRef.current.pause();
+    videoRef.currentTime = 0;
   }, [])
 
   useEffect(() => {
@@ -27,7 +28,7 @@ const Video = ({videoUri, isPlaying}) => {
       loop
       playsInline
       className="object-cover w-full h-full"
-      src={videoUri}
+      src={`${videoUri}#t=0`}
       type="video/mp4"
     />
   );
