@@ -7,10 +7,7 @@ import { formatNumber } from "../../../helpers/format/numberFormat"
 import { IOSView } from "react-device-detect";
 import { Video } from "./Video";
 
-import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
-
-import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
-import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
+import { Heart, Play } from "react-swm-icon-pack";
 
 const Post = ({ props, isPlaying, likedPost = false }) => {
   const { videoUri, comments, likes, author, description } = props;
@@ -52,7 +49,7 @@ const Post = ({ props, isPlaying, likedPost = false }) => {
       {!postStatus.playing && (
         // <IOSView>
         <div className="absolute -mt-16 -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2">
-          <PlayArrowRoundedIcon className="w-32 h-32 text-white/50" />
+          <Play set="curved" size="96" color="white" fill="white" strokeWidth="1"/>
         </div>
         // </IOSView>
       )}
@@ -90,9 +87,9 @@ const Post = ({ props, isPlaying, likedPost = false }) => {
                 onClick={(evt) => handleLike(evt)}
               >
                 {postStatus.liked ? (
-                  <FavoriteRoundedIcon />
+                  <Heart set="curved" size="32" color="rgb(239, 62, 91)" fill="rgb(239, 62, 91)" strokeWidth="1"/>
                 ) : (
-                  <FavoriteBorderRoundedIcon className="scale-2"/>
+                  <Heart set="curved" size="32" color="white" strokeWidth="1"/>
                 )}
 
                 <span className="text-xs">{formatNumber(likes, { notation: 'compact', maximumSignificantDigits: 3 })}</span>

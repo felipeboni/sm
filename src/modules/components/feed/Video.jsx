@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
+import { LazyVideoWithRef } from 'react-lazy-media'
 
 const Video = ({videoUri, isPlaying}) => {
   const videoRef = useRef(null);
   
   useEffect(() => {
     videoRef.current.pause();
-    videoRef.currentTime = 0;
   }, [])
 
   useEffect(() => {
@@ -19,11 +19,9 @@ const Video = ({videoUri, isPlaying}) => {
   }
   
   return (
-    <video
+    <LazyVideoWithRef
       ref={videoRef}
-      preload="true"
       controls={false}
-      autoPlay
       muted
       loop
       playsInline
