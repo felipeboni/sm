@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
-import { Video } from "./Video";
 import Image from "next/image";
 import Link from "next/link";
+
+import { formatNumber } from "../../../helpers/format/numberFormat"
+
 import { IOSView } from "react-device-detect";
+import { Video } from "./Video";
 
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 
@@ -20,20 +23,24 @@ const Post = ({ props, isPlaying, likedPost = false }) => {
   useEffect(() => {
     setPostStatus(() => {
       return {
+        ...postStatus,
         playing: isPlaying,
-        liked: likedPost,
       };
     });
   }, [isPlaying, likedPost]);
 
-  const handleLike = () => {
+  const handleLike = (evt) => {
+    evt.cancelBubble = true;
+    evt.stopPropagation()
+
     setPostStatus({
       ...postStatus,
       liked: !postStatus.liked,
     });
   };
 
-  const handlePause = () => {
+  const handlePause = (evt) => {
+    evt.stopPropagation()
     setPostStatus({
       ...postStatus,
       playing: !postStatus.playing,
@@ -41,7 +48,7 @@ const Post = ({ props, isPlaying, likedPost = false }) => {
   };
 
   return (
-    <div className="relative w-full h-full snap-start">
+    <div className="relative w-full h-full snap-start" onClick={(evt) => handlePause(evt)}>
       {!postStatus.playing && (
         // <IOSView>
         <div className="absolute -mt-16 -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2">
@@ -72,15 +79,15 @@ const Post = ({ props, isPlaying, likedPost = false }) => {
                   : description}
               </h3>
               <h4 className="text-xs opacity-75">
-                Curtido por <span className="font-semibold">{likes}</span>{" "}
-                pessoas
+                Curtido por <span className="font-semibold">{formatNumber(likes, { notation: 'standard' })}</span> pessoas
+                
               </h4>
             </div>
 
             <div className="grid gap-4">
               <button
                 className="z-[999] flex flex-col items-center justify-center gap-2 p-2"
-                onClick={() => handleLike()}
+                onClick={(evt) => handleLike(evt)}
               >
                 {postStatus.liked ? (
                   <FavoriteRoundedIcon />
@@ -88,7 +95,7 @@ const Post = ({ props, isPlaying, likedPost = false }) => {
                   <FavoriteBorderRoundedIcon className="scale-2"/>
                 )}
 
-                <span className="text-xs">{likes}</span>
+                <span className="text-xs">{formatNumber(likes, { notation: 'compact', maximumSignificantDigits: 3 })}</span>
               </button>
             </div>
           </div>
@@ -99,7 +106,6 @@ const Post = ({ props, isPlaying, likedPost = false }) => {
       <Video
         videoUri={videoUri}
         isPlaying={postStatus.playing}
-        onClick={() => handlePause()}
       />
     </div>
   );

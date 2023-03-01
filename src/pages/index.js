@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { Post } from "./modules/components/feed";
+import { Post } from "@/modules/components/feed";
 import { FullPage, Slide } from "react-full-page";
-import { spacing } from "@mui/system";
 
 export default function Home() {
   const initialSlide = 0;
