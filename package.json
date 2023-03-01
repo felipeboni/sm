@@ -12,15 +12,16 @@
     "@react-hook/intersection-observer": "^3.1.1",
     "eslint": "8.35.0",
     "eslint-config-next": "13.2.1",
+    "framer-motion": "^10.0.1",
     "lodash": "^4.17.21",
     "next": "13.2.1",
     "react": "18.2.0",
     "react-device-detect": "^2.2.3",
     "react-dom": "18.2.0",
-    "react-full-page": "^0.1.12",
     "react-hot-toast": "^2.4.0",
     "react-lazy-media": "^0.3.1",
-    "react-swm-icon-pack": "^1.0.14"
+    "react-swm-icon-pack": "^1.0.14",
+    "react-full-page": "^0.1.12"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",

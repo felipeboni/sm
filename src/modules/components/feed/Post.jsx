@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { formatNumber } from "../../../helpers/format/numberFormat"
+import { formatNumber } from "../../../helpers/format/numberFormat";
 
 import { IOSView } from "react-device-detect";
 import { Video } from "./Video";
 
 import { Heart, Play } from "react-swm-icon-pack";
+import { AnimatePresence, motion } from "framer-motion";
 
 const Post = ({ props, isPlaying, likedPost = false }) => {
   const { videoUri, comments, likes, author, description } = props;
@@ -28,7 +29,7 @@ const Post = ({ props, isPlaying, likedPost = false }) => {
 
   const handleLike = (evt) => {
     evt.cancelBubble = true;
-    evt.stopPropagation()
+    evt.stopPropagation();
 
     setPostStatus({
       ...postStatus,
@@ -37,7 +38,7 @@ const Post = ({ props, isPlaying, likedPost = false }) => {
   };
 
   const handlePause = (evt) => {
-    evt.stopPropagation()
+    evt.stopPropagation();
     setPostStatus({
       ...postStatus,
       playing: !postStatus.playing,
@@ -45,11 +46,20 @@ const Post = ({ props, isPlaying, likedPost = false }) => {
   };
 
   return (
-    <div className="relative w-full h-full snap-start" onClick={(evt) => handlePause(evt)}>
+    <div
+      className="relative w-full h-full snap-start"
+      onClick={(evt) => handlePause(evt)}
+    >
       {!postStatus.playing && (
         // <IOSView>
         <div className="absolute -mt-16 -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2">
-          <Play set="curved" size="96" color="white" fill="white" strokeWidth="1"/>
+          <Play
+            set="curved"
+            size="96"
+            color="white"
+            fill="white"
+            strokeWidth="1"
+          />
         </div>
         // </IOSView>
       )}
@@ -76,23 +86,59 @@ const Post = ({ props, isPlaying, likedPost = false }) => {
                   : description}
               </h3>
               <h4 className="text-xs opacity-75">
-                Curtido por <span className="font-semibold">{formatNumber(likes, { notation: 'standard' })}</span> pessoas
-                
+                Curtido por{" "}
+                <span className="font-semibold">
+                  {formatNumber(likes, { notation: "standard" })}
+                </span>{" "}
+                pessoas
               </h4>
             </div>
 
             <div className="grid gap-4">
               <button
-                className="z-[999] flex flex-col items-center justify-center gap-2 p-2"
+                className="z-[999] flex flex-col items-center justify-center p-2 relative -mt-12"
                 onClick={(evt) => handleLike(evt)}
               >
-                {postStatus.liked ? (
-                  <Heart set="curved" size="32" color="rgb(239, 62, 91)" fill="rgb(239, 62, 91)" strokeWidth="1"/>
-                ) : (
-                  <Heart set="curved" size="32" color="white" strokeWidth="1"/>
-                )}
-
-                <span className="text-xs">{formatNumber(likes, { notation: 'compact', maximumSignificantDigits: 3 })}</span>
+                <AnimatePresence>
+                  {postStatus.liked ? (
+                    <motion.span
+                      key="heartFilled"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                      className="absolute"
+                    >
+                      <Heart
+                        set="curved"
+                        size="32"
+                        color="rgb(239, 62, 91)"
+                        fill="rgb(239, 62, 91)"
+                        strokeWidth="1"
+                      />
+                    </motion.span>
+                  ) : (
+                    <motion.span
+                      key="heartOutlined"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                      className="absolute"
+                    >
+                      <Heart
+                        set="curved"
+                        size="32"
+                        color="white"
+                        strokeWidth="1"
+                      />
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+                <span className="pt-12 text-xs">
+                  {formatNumber(likes, {
+                    notation: "compact",
+                    maximumSignificantDigits: 3,
+                  })}
+                </span>
               </button>
             </div>
           </div>
@@ -100,10 +146,7 @@ const Post = ({ props, isPlaying, likedPost = false }) => {
         {/* </IOSView> */}
       </div>
 
-      <Video
-        videoUri={videoUri}
-        isPlaying={postStatus.playing}
-      />
+      <Video videoUri={videoUri} isPlaying={postStatus.playing} />
     </div>
   );
 };

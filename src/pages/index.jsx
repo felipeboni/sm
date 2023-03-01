@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { Post } from "@/modules/components/feed";
 import { FullPage, Slide } from "react-full-page";
 
+import { motion } from "framer-motion";
+
 export default function Home() {
   const initialSlide = 0;
 
@@ -15,7 +17,8 @@ export default function Home() {
       likes: 1029859,
       comments: 10748,
       author: "neymarjr",
-      description: "lorem ipsum dolor isit amet lorem ipsum dolor isit amet lorem ipsum dolor isit amet lorem ipsum dolor isit amet lorem ipsum dolor isit amet",
+      description:
+        "lorem ipsum dolor isit amet lorem ipsum dolor isit amet lorem ipsum dolor isit amet lorem ipsum dolor isit amet lorem ipsum dolor isit amet",
     },
     {
       videoUri:
@@ -23,7 +26,7 @@ export default function Home() {
       likes: 1029859,
       comments: 10748,
       author: "neymarjr",
-      description: "lorem ipsum dolor isit amet"
+      description: "lorem ipsum dolor isit amet",
     },
     {
       videoUri:
@@ -31,7 +34,7 @@ export default function Home() {
       likes: 1029859,
       comments: 10748,
       author: "neymarjr",
-      description: "lorem ipsum dolor isit amet"
+      description: "lorem ipsum dolor isit amet",
     },
     {
       videoUri:
@@ -39,27 +42,29 @@ export default function Home() {
       likes: 1029859,
       comments: 10748,
       author: "neymarjr",
-      description: "lorem ipsum dolor isit amet"
+      description: "lorem ipsum dolor isit amet",
     },
   ]);
 
   useEffect(() => {
-    if (activeSlider + 1 === sliders.length) return getMorePosts()
+    if (activeSlider + 1 === sliders.length) return getMorePosts();
   }, [activeSlider]);
 
   const getMorePosts = () => {
     setLoadingPosts(true);
-    setSliders(oldSliders => {
-      return [
-        ...oldSliders,
-        ...sliders
-      ]
-    })
-  }
+    setSliders((oldSliders) => {
+      return [...oldSliders, ...sliders];
+    });
+  };
 
   return (
-    <>
-      <FullPage className="h-12"
+    <motion.div
+      key="homePage"
+      initial={{ x: -100 }}
+      animate={{ x: 0 }}
+      exit={{ x: 100 }}
+    >
+      <FullPage
         beforeChange={({ to }) => setActiveSlider(to)}
         initialSlide={initialSlide}
       >
@@ -69,6 +74,6 @@ export default function Home() {
           </Slide>
         ))}
       </FullPage>
-    </>
+    </motion.div>
   );
 }
