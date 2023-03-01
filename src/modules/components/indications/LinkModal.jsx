@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 
 import toast, { Toaster } from "react-hot-toast";
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 const Modal = ({state}) => {
   const { openModal, setOpenModal } = state;
@@ -46,7 +45,7 @@ const Modal = ({state}) => {
             className="fixed z-[999] bg-white rounded-lg border border-black/10 max-w-[90%] p-6 grid gap-4 h-auto"
           >
 
-            <CloseRoundedIcon onClick={() => setOpenModal(false)} className="ml-auto opacity-50"/>
+            {/* <CloseRoundedIcon onClick={() => setOpenModal(false)} className="ml-auto opacity-50"/> */}
 
             <div className="grid gap-2 text-center">
               <h1 className="text-xl font-semibold">Aqui está seu link!</h1>

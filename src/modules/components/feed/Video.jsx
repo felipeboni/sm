@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { LazyVideoWithRef } from 'react-lazy-media'
 
 const Video = ({videoUri, isPlaying}) => {
   const videoRef = useRef(null);
@@ -19,14 +18,16 @@ const Video = ({videoUri, isPlaying}) => {
   }
   
   return (
-    <LazyVideoWithRef
+    <video
       ref={videoRef}
+      preload="true"
       controls={false}
+      autoPlay
       muted
       loop
       playsInline
       className="object-cover w-full h-full"
-      src={`${videoUri}#t=0`}
+      src={`${videoUri}#t=50`}
       type="video/mp4"
     />
   );
