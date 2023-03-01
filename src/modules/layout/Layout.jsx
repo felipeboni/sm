@@ -15,11 +15,11 @@ const Layout = ({ children }) => {
   return (
     <>
       <div
-        className={`${poppins.className} mt-[72px] h-screen flex  justify-center`}
+        className={`${poppins.className} mt-[72px] h-[calc(100vh-72px-56px)] flex  justify-center`}
       >
         <Navbar />
 
-        <main className="w-full mt-[16px]">
+        <main className="w-full">
           <AnimatePresence>{children}</AnimatePresence>
         </main>
 
