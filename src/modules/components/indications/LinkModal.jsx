@@ -1,9 +1,22 @@
 import { useState, useEffect } from "react";
-import toast, { Toaster } from "react-hot-toast";
 
-const Modal = (isOpen) => {
-  const [open, setOpen] = useState(isOpen);
-  const link = "http://suaurl.com";
+import toast, { Toaster } from "react-hot-toast";
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+
+const Modal = ({state}) => {
+  const { openModal, setOpenModal } = state;
+
+  const [link, setLink] = useState("");
+
+  useEffect(() => {
+    if (!link) setLink(generateLink())
+  }, [])
+
+  const generateLink = () => {
+    // Aqui eu pego o user e gero um link com o id dele
+    // Em seguida, salvo esse link no banco de dados
+    return `${window.location.href}id-do-user`
+  }
 
   const handleCopyToClipboard = (evt) => {
     navigator.clipboard.writeText(link);
@@ -24,18 +37,17 @@ const Modal = (isOpen) => {
     }
   };
 
-  useEffect(() => {
-    if (isOpen) setOpen(isOpen)
-  }, [isOpen])
-
   return (
     <>
-      {open && (
+      {openModal && (
         <>
           <dialog
             open
             className="fixed z-[999] bg-white rounded-lg border border-black/10 max-w-[90%] p-6 grid gap-4 h-auto"
           >
+
+            <CloseRoundedIcon onClick={() => setOpenModal(false)} className="ml-auto opacity-50"/>
+
             <div className="grid gap-2 text-center">
               <h1 className="text-xl font-semibold">Aqui está seu link!</h1>
               <span className="max-w-xs px-8 text-sm font-semibold text-black/50">
@@ -45,7 +57,8 @@ const Modal = (isOpen) => {
             <div className="grid gap-2">
               <input
                 type="text"
-                value={link}
+                disabled={!link}
+                value={link || "Gerando..."}
                 className="w-full p-4 border rounded-lg bg-offwhite border-black/10"
                 onClick={(evt) => handleCopyToClipboard(evt)}
               />
