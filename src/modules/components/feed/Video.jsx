@@ -27,7 +27,7 @@ const Video = ({videoUri, isPlaying}) => {
       loop
       playsInline
       className="object-cover w-full h-full"
-      src={`${videoUri}#t=50`}
+      src={`${videoUri}#t=0`}
       type="video/mp4"
     />
   );
