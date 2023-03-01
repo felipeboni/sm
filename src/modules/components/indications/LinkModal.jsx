@@ -50,7 +50,7 @@ const Modal = ({ state }) => {
               animate={{ y: 0, opacity: 1 }}
               exit={{ scale: 0, opacity: 0 }}
               open
-              className="fixed z-[999] bg-white rounded-lg border border-black/10 max-w-[90%] p-6 grid gap-4 h-auto shadow-lg"
+              className="fixed z-[999] bg-white rounded max-w-[95%] p-6 grid gap-4 h-auto shadow-lg"
             >
               <Cross
                 set="curved"
@@ -89,7 +89,7 @@ const Modal = ({ state }) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed top-0 bottom-0 left-0 right-0 bg-white/50 z-[998]"
+              className="fixed top-0 bottom-0 left-0 right-0 bg-black/50 z-[998]"
             />
           </>
         )}

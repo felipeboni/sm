@@ -1,19 +1,63 @@
 import { useEffect, useState } from "react";
+import { Poppins } from "next/font/google";
+
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 import { Modal } from "@/modules/components/indications";
+import { IOSNotification } from "@/modules/components/notifications";
 import { User1, Smartphone, Mail, Refresh } from "react-swm-icon-pack";
 
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+
+import { randomIntFromInterval } from "@/helpers/random/randomBetweenRange";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
 
 export default function Wallet() {
   const [openModal, setOpenModal] = useState(false);
+  const [bankNotification, setBankNotification] = useState(false);
   const [activeType, setActiveType] = useState("cpf");
 
+  const MySwal = withReactContent(Swal);
+
   const value = 150;
+
+  const handleWithdraw = () => {
+    MySwal.fire({
+      customClass: {
+        container: poppins.className,
+      },
+      icon: "success",
+      title: <span>Saque realizado!</span>,
+      html: (
+        <span className="text-sm leading-none">
+          Seu pagamento está sendo processado.
+          <br /> O valor estará na sua conta em breve.
+        </span>
+      ),
+      timer: 3000,
+      timerProgressBar: true,
+      showConfirmButton: false,
+      willClose: () => {
+        setTimeout(() => {
+          setBankNotification(true);
+        }, randomIntFromInterval(0, 5000));
+      },
+    });
+  };
 
   return (
     <>
       <Modal state={{ openModal, setOpenModal }} />
+      <AnimatePresence>
+        {bankNotification && (
+          <IOSNotification value={value} setNotification={setBankNotification} />
+        )}
+      </AnimatePresence>
 
       <motion.div
         key="walletPage"
@@ -141,7 +185,10 @@ export default function Wallet() {
               />
             </div>
 
-            <button className="flex flex-col items-center justify-center flex-1 gap-2 p-3 font-medium text-white border rounded-lg bg-primary-500">
+            <button
+              onClick={() => handleWithdraw()}
+              className="flex flex-col items-center justify-center flex-1 gap-2 p-3 font-medium text-white border rounded-lg bg-primary-500"
+            >
               Sacar
             </button>
           </div>

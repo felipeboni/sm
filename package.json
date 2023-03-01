@@ -18,10 +18,12 @@
     "react": "18.2.0",
     "react-device-detect": "^2.2.3",
     "react-dom": "18.2.0",
+    "react-full-page": "^0.1.12",
     "react-hot-toast": "^2.4.0",
     "react-lazy-media": "^0.3.1",
     "react-swm-icon-pack": "^1.0.14",
-    "react-full-page": "^0.1.12"
+    "sweetalert2": "^11.7.3",
+    "sweetalert2-react-content": "^5.0.7"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",
