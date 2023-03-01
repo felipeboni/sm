@@ -19,7 +19,7 @@ export default function Wallet() {
         initial={{ x: -100 }}
         animate={{ x: 0 }}
         exit={{ x: 100 }}
-        className="overflow-y-scroll"
+        className="py-4"
       >
         <div className="grid gap-2 px-4">
           <button

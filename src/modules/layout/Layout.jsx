@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 
 import { Navbar } from "./Navbar";
 import { BottomNav } from "./BottomNav";
+import { useRouter } from "next/router";
 
 import { AnimatePresence } from "framer-motion";
 
@@ -12,10 +13,13 @@ const poppins = Poppins({
 });
 
 const Layout = ({ children }) => {
+  const router = useRouter();
+  const currentRoute = router.pathname;
+
   return (
     <>
       <div
-        className={`${poppins.className} mt-[72px] h-[calc(100vh-72px-56px)] flex  justify-center`}
+        className={`${poppins.className} mt-[72px] h-[calc(100vh-72px-56px)] flex justify-center ${currentRoute !== "/" && "overflow-y-scroll"}`}
       >
         <Navbar />
 
