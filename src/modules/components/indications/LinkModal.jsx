@@ -16,7 +16,7 @@ const Modal = (isOpen) => {
     try {
       if (navigator.canShare)
         await navigator.share({
-          text: `Venha conhecer meu app! Use meu link: ${link}`,
+          text: 'Venha conhecer meu app! Use meu link:',
           url: link,
         });
     } catch (error) {
@@ -34,7 +34,7 @@ const Modal = (isOpen) => {
         <>
           <dialog
             open
-            className="fixed z-[999] bg-white rounded-lg border border-black/10 max-w-[90%] p-6 grid gap-4"
+            className="fixed z-[999] bg-white rounded-lg border border-black/10 max-w-[90%] p-6 grid gap-4 h-fit"
           >
             <div className="grid gap-2 text-center">
               <h1 className="text-xl font-semibold">Aqui está seu link!</h1>
