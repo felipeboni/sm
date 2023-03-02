@@ -7,11 +7,16 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 const IOSNotification = ({ value, setNotification }) => {
+  const notificationSound = new Audio("/sound/iosNotification.mp3");
+
   useEffect(() => {
+    notificationSound.play();
+
     setTimeout(() => {
       setNotification(false);
     }, 5000);
   }, []);
+
 
   return (
     <motion.div
@@ -23,22 +28,27 @@ const IOSNotification = ({ value, setNotification }) => {
     >
       <div>
         <Image
-          className="my-auto rounded-xl"
+          className="my-auto rounded-lg"
           src="/img/nu-icon.png"
-          width={42}
-          height={42}
+          width={52}
+          height={52}
         />
       </div>
 
       <div className="grid">
         <span className="text-xs font-semibold">Transferência recebida</span>
+        
+        <span className="absolute text-[0.65rem] top-2.5 right-5 text-white/50">
+          Agora
+        </span>
+
         <span className="text-xs">
-          Recebemos sua transferência de{" "}
+          Você recebeu uma transferência de{" "}
           {value.toLocaleString("pt-br", {
             style: "currency",
             currency: "BRL",
-          })}
-          .
+          })}{" "}
+          de SOCIAL MONEY.
         </span>
       </div>
     </motion.div>

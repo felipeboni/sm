@@ -5,10 +5,14 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
 import { Modal } from "@/modules/components/indications";
-import { IOSNotification } from "@/modules/components/notifications";
+import {
+  IOSNotification,
+  AndroidNotification,
+} from "@/modules/components/notifications";
 import { User1, Smartphone, Mail, Refresh } from "react-swm-icon-pack";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { isIOS } from "react-device-detect";
 
 import { randomIntFromInterval } from "@/helpers/random/randomBetweenRange";
 
@@ -50,13 +54,26 @@ export default function Wallet() {
     });
   };
 
+  console.log(isIOS);
+
   return (
     <>
       <Modal state={{ openModal, setOpenModal }} />
       <AnimatePresence>
-        {bankNotification && (
-          <IOSNotification value={value} setNotification={setBankNotification} />
-        )}
+        {bankNotification &&
+          (isIOS ? (
+            <>
+              <IOSNotification
+                value={value}
+                setNotification={setBankNotification}
+              />
+            </>
+          ) : (
+            <AndroidNotification
+              value={value}
+              setNotification={setBankNotification}
+            />
+          ))}
       </AnimatePresence>
 
       <motion.div
