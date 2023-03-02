@@ -17,20 +17,20 @@ const Layout = ({ children }) => {
   const router = useRouter();
   const currentRoute = router.pathname;
 
-  const [ userMoney, setUserMoney ] = useState(0);
+  const [ userMoney, setUserMoney ] = useState(2000);
 
   return (
     <>
       <div
         className={`${poppins.className} mt-[72px] h-[calc(100vh-72px-56px)] flex justify-center ${currentRoute !== "/" && "overflow-y-scroll"}`}
       >
-        <Navbar userMoney={{userMoney, setUserMoney}}/>
+        <Navbar userCurrMoney={{userMoney, setUserMoney}}/>
 
         <main className="w-full">
           <AnimatePresence>{cloneElement(children, {userMoney, setUserMoney})}</AnimatePresence>
         </main>
 
-        <BottomNav userMoney={{userMoney, setUserMoney}}/>
+        <BottomNav/>
       </div>
     </>
   );

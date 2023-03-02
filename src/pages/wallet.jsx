@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Poppins } from "next/font/google";
 
 import Swal from "sweetalert2";
@@ -21,16 +21,68 @@ const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
-export default function Wallet() {
+export default function Wallet(props) {
+  const { userMoney, setUserMoney } = props;
+
   const [openModal, setOpenModal] = useState(false);
   const [bankNotification, setBankNotification] = useState(false);
   const [activeType, setActiveType] = useState("cpf");
 
+  const [withdrawValues, setWithdrawValues] = useState({
+    type: "cpf",
+    pix: {
+      value: "",
+      hasErrors: false,
+    },
+    money: {
+      value: "",
+      hasErrors: false,
+    },
+  });
+
+  const pixRef = useRef(null);
+  const moneyRef = useRef(null);
+
   const MySwal = withReactContent(Swal);
 
-  const value = 150;
-
   const handleWithdraw = () => {
+
+    const pixInfo = pixRef.current;
+    const moneyInfo = moneyRef.current;
+
+    setWithdrawValues({
+      ...withdrawValues,
+      pix: {
+        value: parseInt(pixInfo.value),
+        hasErrors:
+          !pixInfo.validity.valid || pixInfo.value === "",
+      },
+      money: {
+        value: parseInt(moneyInfo.value),
+        hasErrors:
+          !moneyInfo.validity.valid || moneyInfo.value === "",
+      },
+    }, checkValidWithdraw());
+
+    return
+  };
+
+  const checkValidWithdraw = () => {
+    if (withdrawValues.pix.hasErrors || withdrawValues.money.hasErrors) return;
+
+    if (withdrawValues.money > userMoney)
+      return setWithdrawValues(() => {
+        return {
+          ...withdrawValues,
+          money: {
+            ...withdrawValues.money,
+            hasErrors: true,
+          },
+        };
+      });
+
+    setUserMoney(userMoney - withdrawValues.money.value);
+
     MySwal.fire({
       customClass: {
         container: poppins.className,
@@ -54,7 +106,16 @@ export default function Wallet() {
     });
   };
 
-  console.log(isIOS);
+  const checkNumberInput = (e) => {
+    if (isNaN(e.key) && ![8, 46].includes(e.keyCode)) return e.preventDefault();
+
+    return true;
+  };
+
+  useEffect(() => {
+    console.log(withdrawValues);
+  }, [withdrawValues])
+  
 
   return (
     <>
@@ -64,13 +125,13 @@ export default function Wallet() {
           (isIOS ? (
             <>
               <IOSNotification
-                value={value}
+                value={withdrawValues.money.value}
                 setNotification={setBankNotification}
               />
             </>
           ) : (
             <AndroidNotification
-              value={value}
+              value={withdrawValues.money.value}
               setNotification={setBankNotification}
             />
           ))}
@@ -101,7 +162,7 @@ export default function Wallet() {
             <h2 className="mb-2 text-sm">Seu saldo</h2>
             <div className="text-primary-500">
               <span className="text-sm">R$</span>
-              <span className="text-5xl font-semibold">{value},00</span>
+              <span className="text-5xl font-semibold">{userMoney},00</span>
             </div>
           </div>
 
@@ -189,16 +250,24 @@ export default function Wallet() {
             </div>
 
             <input
-              type="text"
+              ref={pixRef}
+              type="number"
+              onKeyDown={(e) => checkNumberInput(e)}
               placeholder="Digite sua chave PIX..."
-              className="w-full p-4 border rounded-lg bg-offwhite border-black/10"
+              className={`w-full p-4 border rounded-lg bg-offwhite border-black/10 ${
+                withdrawValues.pix.hasErrors && "!border-red-500"
+              }`}
             />
 
             <div className="relative after:content-['R$'] after:absolute after:left-4 after:font-bold after:top-1/2 after:-translate-y-1/2 after:pointer-events-none">
               <input
-                type="text"
+                ref={moneyRef}
+                type="number"
+                onKeyDown={(e) => checkNumberInput(e)}
                 placeholder="Digite o valor..."
-                className="relative w-full p-4 pl-12 border rounded-lg bg-offwhite border-black/10"
+                className={`relative w-full p-4 pl-12 border rounded-lg bg-offwhite border-black/10 ${
+                  withdrawValues.money.hasErrors && "!border-red-500"
+                }`}
               />
             </div>
 

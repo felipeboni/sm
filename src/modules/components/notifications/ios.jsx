@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 
+import { formatMoney } from "@/helpers/format";
+
 import Image from "next/image";
 import { motion } from "framer-motion";
 
@@ -43,12 +45,7 @@ const IOSNotification = ({ value, setNotification }) => {
         </span>
 
         <span className="text-xs">
-          Você recebeu uma transferência de{" "}
-          {value.toLocaleString("pt-br", {
-            style: "currency",
-            currency: "BRL",
-          })}{" "}
-          de SOCIAL MONEY.
+          Você recebeu uma transferência de {formatMoney(value)} de SOCIAL MONEY.
         </span>
       </div>
     </motion.div>
