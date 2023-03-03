@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
 import { formatMoney } from "@/helpers/format";
+import ReactHowler from "react-howler";
 
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -9,11 +10,7 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 const AndroidNotification = ({ value, setNotification }) => {
-  const notificationSound = new Audio("/sound/androidNotification.mp3");
-
   useEffect(() => {
-    notificationSound.play();
-
     setTimeout(() => {
       setNotification(false);
     }, 5000);
@@ -47,6 +44,8 @@ const AndroidNotification = ({ value, setNotification }) => {
           Você recebeu uma transferência de {formatMoney(value)} de SOCIAL MONEY.
         </span>
       </div>
+
+      <ReactHowler src="/sound/androidNotification.mp3" playing={true}/>
     </motion.div>
   );
 };

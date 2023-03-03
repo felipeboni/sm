@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
 import { formatMoney } from "@/helpers/format";
+import ReactHowler from "react-howler";
 
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -9,16 +10,11 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 const IOSNotification = ({ value, setNotification }) => {
-  const notificationSound = new Audio("/sound/iosNotification.mp3");
-
   useEffect(() => {
-    notificationSound.play();
-
     setTimeout(() => {
       setNotification(false);
     }, 5000);
   }, []);
-
 
   return (
     <motion.div
@@ -39,15 +35,18 @@ const IOSNotification = ({ value, setNotification }) => {
 
       <div className="grid">
         <span className="text-xs font-semibold">Transferência recebida</span>
-        
+
         <span className="absolute text-[0.65rem] top-2.5 right-5 text-white/50">
           Agora
         </span>
 
         <span className="text-xs">
-          Você recebeu uma transferência de {formatMoney(value)} de SOCIAL MONEY.
+          Você recebeu uma transferência de {formatMoney(value)} de SOCIAL
+          MONEY.
         </span>
       </div>
+
+      <ReactHowler src="/sound/iosNotification.mp3" playing={true}/>
     </motion.div>
   );
 };

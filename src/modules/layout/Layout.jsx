@@ -7,6 +7,7 @@ import { BottomNav } from "./BottomNav";
 import { useRouter } from "next/router";
 
 import { AnimatePresence } from "framer-motion";
+import { Toaster } from "react-hot-toast";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -32,6 +33,8 @@ const Layout = ({ children }) => {
 
         <BottomNav/>
       </div>
+
+      <Toaster position="bottom-center" />
     </>
   );
 };

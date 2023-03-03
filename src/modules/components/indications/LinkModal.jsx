@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { Cross } from "react-swm-icon-pack";
 
 import { AnimatePresence, motion } from "framer-motion";
@@ -94,8 +94,6 @@ const Modal = ({ state }) => {
           </>
         )}
       </AnimatePresence>
-
-      <Toaster position="bottom-center" />
     </>
   );
 };

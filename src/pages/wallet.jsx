@@ -4,6 +4,12 @@ import { Poppins } from "next/font/google";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
+import * as yup from "yup";
+import { cpf, cnpj } from "cpf-cnpj-validator";
+import validator from "validator";
+
+import toast from "react-hot-toast";
+
 import { Modal } from "@/modules/components/indications";
 import {
   IOSNotification,
@@ -45,43 +51,121 @@ export default function Wallet(props) {
 
   const MySwal = withReactContent(Swal);
 
-  const handleWithdraw = () => {
+  const pixTypeValidations = {
+    cpf: yup
+      .string("CPF inválido")
+      .required()
+      .test((value) =>
+        value.length > 11 ? cnpj.isValid(value) : cpf.isValid(value)
+      ),
+    phone: yup
+      .string("Telefone inválido")
+      .required()
+      .test((value) => validator.isMobilePhone(value)),
+    mail: yup.string("E-mail inválido").required().email(),
+    random: yup.string().required(),
+  };
 
+  const widthdrawSchema = yup.object().shape({
+    pix: pixTypeValidations[activeType],
+    money: yup.number().required().positive().integer(),
+  });
+
+  const handleWithdraw = () => {
     const pixInfo = pixRef.current;
     const moneyInfo = moneyRef.current;
 
-    setWithdrawValues({
-      ...withdrawValues,
-      pix: {
-        value: parseInt(pixInfo.value),
-        hasErrors:
-          !pixInfo.validity.valid || pixInfo.value === "",
-      },
-      money: {
-        value: parseInt(moneyInfo.value),
-        hasErrors:
-          !moneyInfo.validity.valid || moneyInfo.value === "",
-      },
-    }, checkValidWithdraw());
+    const checkWithdrawData = {
+      pix: pixInfo.value,
+      money: parseInt(moneyInfo.value),
+    };
 
-    return
-  };
+    widthdrawSchema
+      .validate(checkWithdrawData, { abortEarly: false })
+      .then((valid) => {
+        // if (!valid) return toast.error("Preencha os campos corretamente!");
 
-  const checkValidWithdraw = () => {
-    if (withdrawValues.pix.hasErrors || withdrawValues.money.hasErrors) return;
+        setWithdrawValues(
+          {
+            ...withdrawValues,
+            pix: {
+              value: parseInt(pixInfo.value),
+              hasErrors: false,
+            },
+            money: {
+              value: parseInt(moneyInfo.value),
+              hasErrors: false,
+            },
+          },
+          checkValidWithdraw()
+        );
+      })
+      .catch((err) => {
+        console.log(err);
 
-    if (withdrawValues.money > userMoney)
-      return setWithdrawValues(() => {
-        return {
+        if (err.toString().includes("errors")) {
+          setWithdrawValues({
+            ...withdrawValues,
+            pix: {
+              ...withdrawValues.pix,
+              hasErrors: true,
+            },
+            money: {
+              ...withdrawValues.money,
+              hasErrors: true,
+            },
+          });
+
+          toast.error("Preencha os campos corretamente!");
+          return;
+        }
+
+        if (err.toString().includes("pix")) {
+          setWithdrawValues({
+            ...withdrawValues,
+            pix: {
+              ...withdrawValues.pix,
+              hasErrors: true,
+            },
+          });
+
+          toast.error("PIX inválido!");
+          return;
+        }
+
+        setWithdrawValues({
           ...withdrawValues,
           money: {
             ...withdrawValues.money,
             hasErrors: true,
           },
-        };
+        });
+
+        toast.error("Valor a ser retirado é inválido!");
+        // this.showToast('top-right', 'danger', JSON.stringify(err.errors))
+      });
+  };
+
+  const checkValidWithdraw = () => {
+    if (withdrawValues.pix.hasErrors || withdrawValues.money.hasErrors) return;
+
+    console.log(parseInt(moneyRef.current.value) > userMoney)
+
+    if (parseInt(moneyRef.current.value) > userMoney) {
+      toast.error("Saldo insuficiente!");
+
+      setWithdrawValues({
+        ...withdrawValues,
+        money: {
+          ...withdrawValues.money,
+          hasErrors: true,
+        },
       });
 
-    setUserMoney(userMoney - withdrawValues.money.value);
+      return
+    }
+
+    setUserMoney(userMoney - parseInt(moneyRef.current.value));
 
     MySwal.fire({
       customClass: {
@@ -114,8 +198,7 @@ export default function Wallet(props) {
 
   useEffect(() => {
     console.log(withdrawValues);
-  }, [withdrawValues])
-  
+  }, [withdrawValues]);
 
   return (
     <>
@@ -251,8 +334,7 @@ export default function Wallet(props) {
 
             <input
               ref={pixRef}
-              type="number"
-              onKeyDown={(e) => checkNumberInput(e)}
+              type="text"
               placeholder="Digite sua chave PIX..."
               className={`w-full p-4 border rounded-lg bg-offwhite border-black/10 ${
                 withdrawValues.pix.hasErrors && "!border-red-500"
