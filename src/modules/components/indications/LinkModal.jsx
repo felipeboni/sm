@@ -58,14 +58,14 @@ const Modal = ({ state }) => {
 
     for (var i = 0; i < noOfNotifications; i++) {
       ((ind) => {
+        const thisTimeoutTime = randomBetweenRange(1000, 3000);
         setTimeout(() => {
           setBankNotification(() => true);
 
           setTimeout(() => {
-
             setBankNotification(() => false);
-          }, 1000 + randomBetweenRange(1000, 4000) * ind);
-        }, 1000 + 5000 * ind);
+          }, 1000 + thisTimeoutTime * ind);
+        }, 1000 + thisTimeoutTime * ind);
       })(i);
     }
 
