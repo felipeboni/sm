@@ -65,7 +65,7 @@ const Modal = ({ state }) => {
 
             setBankNotification(() => false);
           }, 1000 + randomBetweenRange(1000, 4000) * ind);
-        }, 1000 + randomBetweenRange(1000, 4000) * ind);
+        }, 1000 + 5000 * ind);
       })(i);
     }
 
