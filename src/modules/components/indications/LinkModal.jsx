@@ -5,10 +5,19 @@ import { Cross } from "react-swm-icon-pack";
 
 import { AnimatePresence, motion } from "framer-motion";
 
+import { randomBetweenRange } from "@/helpers/random/randomBetweenRange";
+import {
+  IOSNotification,
+  AndroidNotification,
+} from "@/modules/components/notifications";
+import { isIOS } from "react-device-detect";
+
 const Modal = ({ state }) => {
   const { openModal, setOpenModal } = state;
 
   const [link, setLink] = useState("");
+  const [bankNotification, setBankNotification] = useState(false);
+  const [noOfNotifications, setNoOfNotifications] = useState(0);
 
   useEffect(() => {
     if (!link) setLink(generateLink());
@@ -39,9 +48,48 @@ const Modal = ({ state }) => {
     }
   };
 
+  const handleMultipleShare = async () => {
+    setNoOfNotifications(randomBetweenRange(5, 13));
+    setOpenModal(false);
+  };
+
+  useEffect(() => {
+    if (noOfNotifications === 0) return;
+
+    for (var i = 0; i < noOfNotifications; i++) {
+      ((ind) => {
+        setTimeout(() => {
+          setBankNotification(() => true);
+
+          setTimeout(() => {
+
+            setBankNotification(() => false);
+          }, 1000 + randomBetweenRange(1000, 4000) * ind);
+        }, 1000 + randomBetweenRange(1000, 4000) * ind);
+      })(i);
+    }
+
+    setNoOfNotifications(0);
+  }, [noOfNotifications]);
+
   return (
     <>
       <AnimatePresence>
+        {bankNotification &&
+          (isIOS ? (
+            <>
+              <IOSNotification
+                value={10}
+                setNotification={setBankNotification}
+              />
+            </>
+          ) : (
+            <AndroidNotification
+              value={10}
+              setNotification={setBankNotification}
+            />
+          ))}
+
         {openModal && (
           <>
             <motion.dialog
@@ -81,6 +129,13 @@ const Modal = ({ state }) => {
                   onClick={() => handleShare()}
                 >
                   Compartilhar
+                </button>
+
+                <button
+                  className="w-full p-4 font-medium text-white border rounded-lg bg-primary-500"
+                  onClick={() => handleMultipleShare()}
+                >
+                  Compartilhar em Massa
                 </button>
               </div>
             </motion.dialog>

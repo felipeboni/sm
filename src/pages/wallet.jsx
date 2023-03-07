@@ -20,7 +20,7 @@ import { User1, Smartphone, Mail, Refresh } from "react-swm-icon-pack";
 import { AnimatePresence, motion } from "framer-motion";
 import { isIOS } from "react-device-detect";
 
-import { randomIntFromInterval } from "@/helpers/random/randomBetweenRange";
+import { randomBetweenRange } from "@/helpers/random/randomBetweenRange";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -149,8 +149,6 @@ export default function Wallet(props) {
   const checkValidWithdraw = () => {
     if (withdrawValues.pix.hasErrors || withdrawValues.money.hasErrors) return;
 
-    console.log(parseInt(moneyRef.current.value) > userMoney)
-
     if (parseInt(moneyRef.current.value) > userMoney) {
       toast.error("Saldo insuficiente!");
 
@@ -185,7 +183,7 @@ export default function Wallet(props) {
       willClose: () => {
         setTimeout(() => {
           setBankNotification(true);
-        }, randomIntFromInterval(0, 5000));
+        }, randomBetweenRange(0, 5000));
       },
     });
   };
