@@ -1,18 +1,28 @@
 import { useState, useEffect } from "react";
+import { Poppins } from "next/font/google";
 
 import toast from "react-hot-toast";
 import { Cross } from "react-swm-icon-pack";
 
 import { AnimatePresence, motion } from "framer-motion";
 
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
 import { randomBetweenRange } from "@/helpers/random/randomBetweenRange";
 import {
-  IOSNotification,
-  AndroidNotification,
+  Notify
 } from "@/modules/components/notifications";
-import { isIOS } from "react-device-detect";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
+
 
 const Modal = ({ state }) => {
+  const MySwal = withReactContent(Swal);
+
   const { openModal, setOpenModal } = state;
 
   const [link, setLink] = useState("");
@@ -40,7 +50,7 @@ const Modal = ({ state }) => {
     try {
       if (navigator.canShare)
         await navigator.share({
-          text: "Venha conhecer meu app! Use meu link:",
+          text: "Ganhe dinheiro comigo utilizando o SocialMoney! Use meu link e ganhe R$100,00.",
           url: link,
         });
     } catch (error) {
@@ -49,7 +59,25 @@ const Modal = ({ state }) => {
   };
 
   const handleMultipleShare = async () => {
-    setNoOfNotifications(randomBetweenRange(5, 13));
+    MySwal.fire({
+      customClass: {
+        container: poppins.className,
+      },
+      icon: "success",
+      title: <span>Compartilhando...</span>,
+      html: (
+        <span className="text-sm leading-none">
+          Seu link de indicação está sendo enviado para todos os seus contatos.
+        </span>
+      ),
+      timer: 5000,
+      timerProgressBar: true,
+      showConfirmButton: false,
+      willClose: () => {
+        setNoOfNotifications(randomBetweenRange(10, 18));
+      },
+    });
+
     setOpenModal(false);
   };
 
@@ -64,8 +92,8 @@ const Modal = ({ state }) => {
 
           setTimeout(() => {
             setBankNotification(() => false);
-          }, 1000 + thisTimeoutTime * ind);
-        }, 1000 + thisTimeoutTime * ind);
+          }, 1000 + thisTimeoutTime * ind)
+        }, 2000 * ind);
       })(i);
     }
 
@@ -75,20 +103,8 @@ const Modal = ({ state }) => {
   return (
     <>
       <AnimatePresence>
-        {bankNotification &&
-          (isIOS ? (
-            <>
-              <IOSNotification
-                value={10}
-                setNotification={setBankNotification}
-              />
-            </>
-          ) : (
-            <AndroidNotification
-              value={10}
-              setNotification={setBankNotification}
-            />
-          ))}
+        {bankNotification && <Notify value={10} setNotificationVisible={setBankNotification}/>}
+          
 
         {openModal && (
           <>
@@ -135,7 +151,7 @@ const Modal = ({ state }) => {
                   className="w-full p-4 font-medium text-white border rounded-lg bg-primary-500"
                   onClick={() => handleMultipleShare()}
                 >
-                  Compartilhar em Massa
+                  Compartilhar em massa
                 </button>
               </div>
             </motion.dialog>
