@@ -36,9 +36,9 @@ const Notify = ({ value, setNotificationVisible }) => {
   return (
     <>
       {isIOS ? (
-        <IOSNotification data={banks[randomBetweenRange(1,3)]} setNotification={setNotificationVisible} />
+        <IOSNotification data={banks[randomBetweenRange(1,3)]} setNotification={setNotificationVisible} value={value}/>
       ) : (
-        <AndroidNotification data={banks[randomBetweenRange(1,3)]} setNotification={setNotificationVisible} />
+        <AndroidNotification data={banks[randomBetweenRange(1,3)]} setNotification={setNotificationVisible} value={value}/>
       )}
     </>
   );

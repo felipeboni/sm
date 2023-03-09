@@ -1,6 +1,7 @@
-import { useState, cloneElement } from "react";
-import Head from "next/head";
+import { cloneElement } from "react";
 import { Poppins } from "next/font/google";
+
+import { MoneyContextProvider } from "@/services/moneyContext";
 
 import { Navbar } from "./Navbar";
 import { BottomNav } from "./BottomNav";
@@ -18,24 +19,22 @@ const Layout = ({ children }) => {
   const router = useRouter();
   const currentRoute = router.pathname;
 
-  const [ userMoney, setUserMoney ] = useState(2000);
-
   return (
-    <>
+    <MoneyContextProvider>
       <div
         className={`${poppins.className} mt-[72px] h-[calc(100vh-72px-56px)] flex justify-center ${currentRoute !== "/" && "overflow-y-scroll"}`}
       >
-        <Navbar userCurrMoney={{userMoney, setUserMoney}}/>
+        <Navbar/>
 
         <main className="w-full">
-          <AnimatePresence>{cloneElement(children, {userMoney, setUserMoney})}</AnimatePresence>
+          <AnimatePresence>{cloneElement(children, {money, setMoney})}</AnimatePresence>
         </main>
 
         <BottomNav/>
       </div>
 
       <Toaster position="bottom-center" />
-    </>
+    </MoneyContextProvider>
   );
 };
 
