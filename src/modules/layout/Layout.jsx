@@ -1,4 +1,3 @@
-import { cloneElement } from "react";
 import { Poppins } from "next/font/google";
 
 import { MoneyContextProvider } from "@/services/moneyContext";
@@ -27,7 +26,7 @@ const Layout = ({ children }) => {
         <Navbar/>
 
         <main className="w-full">
-          <AnimatePresence>{cloneElement(children, {money, setMoney})}</AnimatePresence>
+          <AnimatePresence>{children}</AnimatePresence>
         </main>
 
         <BottomNav/>

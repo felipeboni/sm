@@ -10,7 +10,6 @@ import { Modal } from "@/modules/components/indications"
 
 const Navbar = ({ userCurrMoney }) => {
   const { money, setMoney } = useContext(moneyContext);
-
   const [openModal, setOpenModal] = useState(false)
 
   return (

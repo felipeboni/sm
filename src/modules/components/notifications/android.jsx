@@ -1,7 +1,6 @@
 import { useEffect, useContext } from "react";
 
 import ReactHowler from "react-howler";
-import { moneyContext } from "@/services/moneyContext";
 
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -10,14 +9,9 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 const AndroidNotification = ({ data, setNotification, value }) => {
-  const { money, setMoney } = useContext(moneyContext);
-
   const { icon, bank, title, description } = data;
 
   useEffect(() => {
-    console.log(money + value)
-    setMoney(() => money + value);
-
     setTimeout(() => {
       setNotification(false);
     }, 5000);

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import { Poppins } from "next/font/google";
 
 import Swal from "sweetalert2";
@@ -11,24 +11,21 @@ import validator from "validator";
 import toast from "react-hot-toast";
 
 import { Modal } from "@/modules/components/indications";
-import {
-  IOSNotification,
-  AndroidNotification,
-} from "@/modules/components/notifications";
+import { Notify } from "@/modules/components/notifications";
 import { User1, Smartphone, Mail, Refresh } from "react-swm-icon-pack";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { isIOS } from "react-device-detect";
 
 import { randomBetweenRange } from "@/helpers/random/randomBetweenRange";
+import { moneyContext } from "@/services/moneyContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
-export default function Wallet(props) {
-  const { userMoney, setUserMoney } = props;
+export default function Wallet() {
+  const { money, setMoney } = useContext(moneyContext);
 
   const [openModal, setOpenModal] = useState(false);
   const [bankNotification, setBankNotification] = useState(false);
@@ -149,7 +146,7 @@ export default function Wallet(props) {
   const checkValidWithdraw = () => {
     if (withdrawValues.pix.hasErrors || withdrawValues.money.hasErrors) return;
 
-    if (parseInt(moneyRef.current.value) > userMoney) {
+    if (parseInt(moneyRef.current.value) > money) {
       toast.error("Saldo insuficiente!");
 
       setWithdrawValues({
@@ -163,7 +160,7 @@ export default function Wallet(props) {
       return
     }
 
-    setUserMoney(userMoney - parseInt(moneyRef.current.value));
+    setMoney(money - parseInt(moneyRef.current.value));
 
     MySwal.fire({
       customClass: {
@@ -202,20 +199,7 @@ export default function Wallet(props) {
     <>
       <Modal state={{ openModal, setOpenModal }} />
       <AnimatePresence>
-        {bankNotification &&
-          (isIOS ? (
-            <>
-              <IOSNotification
-                value={withdrawValues.money.value}
-                setNotification={setBankNotification}
-              />
-            </>
-          ) : (
-            <AndroidNotification
-              value={withdrawValues.money.value}
-              setNotification={setBankNotification}
-            />
-          ))}
+      {bankNotification && <Notify value={10} setNotificationVisible={setBankNotification}/>}
       </AnimatePresence>
 
       <motion.div
@@ -243,7 +227,7 @@ export default function Wallet(props) {
             <h2 className="mb-2 text-sm">Seu saldo</h2>
             <div className="text-primary-500">
               <span className="text-sm">R$</span>
-              <span className="text-5xl font-semibold">{userMoney},00</span>
+              <span className="text-5xl font-semibold">{money},00</span>
             </div>
           </div>
 
