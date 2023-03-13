@@ -80,7 +80,7 @@ export default function Wallet() {
     widthdrawSchema
       .validate(checkWithdrawData, { abortEarly: false })
       .then((valid) => {
-        // if (!valid) return toast.error("Preencha os campos corretamente!");
+        if (!valid) return toast.error("Preencha os campos corretamente!");
 
         setWithdrawValues(
           {
@@ -192,8 +192,8 @@ export default function Wallet() {
   };
 
   useEffect(() => {
-    console.log(withdrawValues);
-  }, [withdrawValues]);
+    pixRef.current.value = "";
+  }, [activeType]);
 
   return (
     <>

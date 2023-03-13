@@ -1,6 +1,6 @@
 import { useEffect, useContext } from "react";
 
-import ReactHowler from "react-howler";
+import {Howl} from 'howler';
 
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -11,7 +11,13 @@ const inter = Inter({ subsets: ["latin"] });
 const AndroidNotification = ({ data, setNotification, value }) => {
   const { icon, bank, title, description } = data;
 
+  const notify = new Howl({
+    src: ['/sound/androidNotification.mp3']
+  });
+
   useEffect(() => {
+    notify.play();
+
     setTimeout(() => {
       setNotification(false);
     }, 5000);
@@ -45,8 +51,6 @@ const AndroidNotification = ({ data, setNotification, value }) => {
           {description}
         </span>
       </div>
-
-      <ReactHowler src="/sound/androidNotification.mp3" playing={true}/>
     </motion.div>
   );
 };
