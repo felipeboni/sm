@@ -1,31 +1,19 @@
-import { Octokit } from "octokit";
-import { withIronSessionApiRoute } from "iron-session/next";
-import { sessionOptions } from "@/lib/session";
-import { executeQuery } from "@/lib/db";
-const octokit = new Octokit();
+import { db } from "@/utils/createDb";
+import lodash from "lodash";
 
-async function loginRoute(req, res) {
-  const { username } = await req.body;
+export default async function handler(req, res) {
+  const { username, password } = await req.body;
 
   try {
-    // const {
-    //   data: { login, avatar_url },
-    // } = await octokit.rest.users.getByUsername({ username })
+    db.chain = lodash.chain(db.data);
 
-    
-    const result = await executeQuery({
-      query: "INSERT INTO users VALUES(?)",
-      values: Object.values(username),
-    });
-    console.log(result);
+    const user = db.chain
+      .get("users")
+      .find({ username: username, password: password })
+      .value();
 
-    // const user = { isLoggedIn: true, login, avatarUrl: avatar_url };
-    // req.session.user = user;
-    // await req.session.save();
-    // res.json(user);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+      res.status(200).json({ user: user });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 }
-
-export default withIronSessionApiRoute(loginRoute, sessionOptions);

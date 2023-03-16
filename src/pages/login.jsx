@@ -1,46 +1,48 @@
-import React, { useState } from "react";
-import useUser from "@/lib/useUser";
-import Form from "@/modules/components/auth/login/Form";
-import fetchJson, { FetchError } from "@/lib/fetchJson";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { useLogin } from "../hooks/auth/useLogin";
 
 export default function Login() {
-  // here we just check if user is already logged in and redirect to profile
-  const { mutateUser } = useUser({
-    redirectTo: "/profile-sg",
-    redirectIfFound: true,
-  });
-
-  const [errorMsg, setErrorMsg] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const { login } = useLogin();
+  const router = useRouter();
+  const onSubmit = () => {
+    if (!name || !password) {
+      alert("Please enter information");
+    } else {
+      login(name, password)
+        .then((res) => router.push("/profile"))
+        .catch((e) => alert(e));
+    }
+  };
 
   return (
-    <div className="login">
-      <Form
-        errorMessage={errorMsg}
-        onSubmit={async function handleSubmit(event) {
-          event.preventDefault();
-
-          const body = {
-            username: event.currentTarget.username.value,
-          };
-
-          try {
-            console.log(JSON.stringify(body))
-            mutateUser(
-              await fetchJson("/api/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(body),
-              })
-            );
-          } catch (error) {
-            if (error instanceof FetchError) {
-              setErrorMsg(error.data.message);
-            } else {
-              console.error("An unexpected error happened:", error);
-            }
-          }
-        }}
-      />
+    <div className="flex items-center justify-center w-screen h-screen">
+      <div className="flex flex-col gap-2 h-fit">
+        <p className="text-2xl font-bold">Login Form</p>
+        <label>Username</label>
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="h-8 px-2 border border-black border-solid rounded w-80"
+          placeholder="username"
+        />
+        <label className="mt-4">Password</label>
+        <input
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="h-8 px-2 border border-black border-solid rounded w-80"
+          placeholder="password"
+          type="password"
+        />
+        <button
+          onClick={onSubmit}
+          className="h-10 mt-8 text-white bg-black rounded w-80"
+        >
+          Login
+        </button>
+      </div>
     </div>
   );
 }
